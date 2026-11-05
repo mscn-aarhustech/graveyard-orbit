@@ -1,0 +1,26 @@
+[
+  {
+    "archive": "kenney_space-shooter-remastered.zip",
+    "folder": "kenney/space-shooter-remastered",
+    "archiveSha256": "0edbe0ab5cda6c44901d8c42f150268fdfa0c8d48492098669f37e9c296929b5",
+    "source": "User-supplied Kenney archive",
+    "license": "CC0",
+    "changes": "Unpacked with original paths; OS metadata omitted."
+  },
+  {
+    "archive": "kenney_space-shooter-extension.zip",
+    "folder": "kenney/space-shooter-extension",
+    "archiveSha256": "77efd54b343bbd123af8cc7f534446706731b9cf5a34f38d8fcc54e7245f9c91",
+    "source": "User-supplied Kenney archive",
+    "license": "CC0",
+    "changes": "Unpacked with original paths; OS metadata omitted."
+  },
+  {
+    "archive": "kenney_sci-fi-sounds.zip",
+    "folder": "kenney/sci-fi-sounds",
+    "archiveSha256": "119340f351a5098ad814f78719438c0da355a9ce8a4c8a3af6a8d48aa3d49e04",
+    "source": "User-supplied Kenney archive",
+    "license": "CC0",
+    "changes": "Unpacked with original paths; OS metadata omitted."
+  }
+]

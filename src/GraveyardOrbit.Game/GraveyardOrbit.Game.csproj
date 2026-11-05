@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><AllowUnsafeBlocks>true</AllowUnsafeBlocks></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../GraveyardOrbit.SpacePhysics/GraveyardOrbit.SpacePhysics.csproj" />
+    <PackageReference Include="Raylib-cs" />
+    <PackageReference Include="Box2D.NET" />
+    <Content Include="../../assets/asset-manifest.json" Link="assets/asset-manifest.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../assets/kenney/space-shooter-remastered/PNG/playerShip1_blue.png" Link="assets/kenney/space-shooter-remastered/PNG/playerShip1_blue.png" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../assets/kenney/space-shooter-remastered/PNG/Meteors/meteorBrown_big1.png" Link="assets/kenney/space-shooter-remastered/PNG/Meteors/meteorBrown_big1.png" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../assets/kenney/space-shooter-remastered/PNG/Lasers/laserBlue01.png" Link="assets/kenney/space-shooter-remastered/PNG/Lasers/laserBlue01.png" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../assets/kenney/sci-fi-sounds/Audio/laserSmall_000.ogg" Link="assets/kenney/sci-fi-sounds/Audio/laserSmall_000.ogg" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../assets/kenney/sci-fi-sounds/Audio/explosionCrunch_000.ogg" Link="assets/kenney/sci-fi-sounds/Audio/explosionCrunch_000.ogg" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../assets/THIRD-PARTY-NOTICES.md" Link="assets/THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../assets/kenney/space-shooter-remastered/license.txt" Link="assets/kenney/space-shooter-remastered/license.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../assets/kenney/space-shooter-extension/License.txt" Link="assets/kenney/space-shooter-extension/License.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../assets/kenney/sci-fi-sounds/License.txt" Link="assets/kenney/sci-fi-sounds/License.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../LICENSE" Link="LICENSE" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../THIRD_PARTY_LICENSES/*.txt" Link="THIRD_PARTY_LICENSES/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

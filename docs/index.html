@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Graveyard Orbit: a C# space shooter and collaborative coding playground.">
+  <title>Graveyard Orbit</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header><a class="brand" href="#">GO / GRAVEYARD ORBIT</a><a href="https://github.com/mscn-aarhustech/graveyard-orbit">Repository ↗</a></header>
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <div><p class="eyebrow">ONE PLANET. SIX ROCKS. YOUR TRAJECTORY.</p><h1 id="title">Space is quiet.<br>Bad code isn't.</h1>
+      <p>Pilot a salvage ship through a graveyard of orbiting asteroids. Then fork the code, investigate the systems, and make this tiny universe your own.</p>
+      <a class="button" href="https://github.com/mscn-aarhustech/graveyard-orbit#quick-start">Build the desktop game</a><p class="note">C# / .NET · Raylib-cs · Box2D.NET · xUnit</p></div>
+      <div class="orbit-art" aria-hidden="true"><div class="orbit ring-one"></div><div class="orbit ring-two"></div><div class="planet"></div><span class="rock rock-one"></span><span class="rock rock-two"></span><img class="ship" src="images/playerShip1_blue.png" alt=""></div>
+    </section>
+    <section class="panel" aria-labelledby="callsign-heading"><div><p class="eyebrow">FLIGHT MANIFEST</p><h2 id="callsign-heading">Choose your callsign</h2><p id="greeting" aria-live="polite">Welcome aboard, pilot.</p></div>
+      <form id="callsign-form"><label for="callsign">Callsign (maximum 24 characters)</label><div class="form-row"><input id="callsign" name="callsign" maxlength="24" required autocomplete="nickname"><button type="submit">Save</button></div><p class="note">Saved only in this browser. No account, server, or tracking.</p></form>
+    </section>
+    <section aria-labelledby="controls-heading"><p class="eyebrow">FLIGHT SCHOOL</p><h2 id="controls-heading">Momentum is not a suggestion.</h2>
+      <div class="cards"><article><h3>Fly</h3><p><kbd>W</kbd> / <kbd>S</kbd> apply forward or reverse thrust. <kbd>A</kbd> / <kbd>D</kbd> rotate. Gravity never takes a break.</p></article><article><h3>Survive</h3><p><kbd>Space</kbd> fires. <kbd>Shift</kbd> boosts thrust; <kbd>Ctrl</kbd> makes it precise. Collisions and escaping the arena end your run.</p></article><article><h3>Try again</h3><p><kbd>Enter</kbd> restarts. <kbd>M</kbd> toggles sound. <kbd>Esc</kbd> exits. The desktop interface also has clickable mute and restart controls.</p></article></div>
+    </section>
+    <section class="panel"><div><p class="eyebrow">YOUR NEXT MISSION</p><h2>Read. Branch. Change. Review.</h2><p>This website is also a student playground. Start with keyboard focus, a theme switcher, or a better controls page. The game is a desktop application, not embedded here.</p></div><a class="button secondary" href="https://github.com/mscn-aarhustech/graveyard-orbit/blob/main/teaching/STUDENT_GUIDE.md">Open the student guide</a></section>
+  </main>
+  <footer>Original code: MIT. Ship artwork: Kenney, CC0. Built for learning together.</footer>
+</body>
+</html>

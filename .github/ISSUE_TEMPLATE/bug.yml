@@ -1,0 +1,16 @@
+name: Bug report
+description: Investigate reproducible unexpected behavior.
+title: "[Bug] "
+body:
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include OS, SDK version, controls, and expected versus actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and hypothesis
+      description: Logs, screenshot, likely code path, and a proposed regression test.

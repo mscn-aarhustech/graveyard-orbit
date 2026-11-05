@@ -1,0 +1,21 @@
+name: Feature task
+description: Propose a small feature with acceptance criteria.
+title: "[Feature] "
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Player or developer benefit
+    validations:
+      required: true
+  - type: textarea
+    id: criteria
+    attributes:
+      label: Acceptance criteria
+      description: Describe observable behavior and how it will be checked.
+    validations:
+      required: true
+  - type: textarea
+    id: plan
+    attributes:
+      label: Likely files and smallest tracer bullet
