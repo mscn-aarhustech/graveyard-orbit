@@ -1,7 +1,0 @@
-{
-  "version": "2.0.0",
-  "tasks": [
-    {"label":"build","type":"process","command":"dotnet","args":["build","GraveyardOrbit.sln"],"problemMatcher":"$msCompile","group":{"kind":"build","isDefault":true}},
-    {"label":"test","type":"process","command":"dotnet","args":["test","GraveyardOrbit.sln"],"problemMatcher":"$msCompile","group":"test"}
-  ]
-}
