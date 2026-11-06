@@ -1,9 +1,4 @@
 using System.Numerics;
-using GraveyardOrbit.Game.Assets;
-using GraveyardOrbit.Game.Audio;
-using GraveyardOrbit.Game.Input;
-using GraveyardOrbit.Game.Rendering;
-using GraveyardOrbit.Game.Simulation;
 using Raylib_cs;
 
 namespace GraveyardOrbit.Game;
@@ -18,54 +13,70 @@ public static class Program
         Raylib.SetWindowMinSize(640, 360);
         Raylib.SetTargetFPS(60);
         RenderTexture2D canvas = default;
-        GameSession? game = null;
+        Game? game = null;
         try
         {
-            AssetCatalog catalog = new(Path.Combine(AppContext.BaseDirectory, "assets"));
-            using SpriteManager sprites = new(catalog, new RaylibTextureLoader());
-            using SoundManager sounds = new(catalog);
-            GameRenderer renderer = new(sprites);
-            canvas = Raylib.LoadRenderTexture(GameRenderer.Width, GameRenderer.Height);
-            Raylib.SetTextureFilter(canvas.Texture, TextureFilter.Point);
-            game = new GameSession();
+            using Assets assets = new();
+            assets.StartAudio();
+            Camera camera = new(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
+            Renderer renderer = new(camera, assets);
+            game = new Game();
             double accumulator = 0;
+            bool fullscreen = false;
+            Vector2 windowPosition = default;
+            Vector2 windowSize = new(1280, 720);
             int frames = 0;
-            bool smokeShot = false;
-            while (!Raylib.WindowShouldClose() && (!smoke || frames < 120))
+            int initialWidth = camera.Width;
+            int largestWidth = initialWidth;
+            int fullscreenChanges = 0;
+            bool shot = false;
+            while (!Raylib.WindowShouldClose() && (!smoke || frames < 180))
             {
-                Rectangle destination = Letterbox();
-                Vector2 mouse = Raylib.GetMousePosition();
-                Vector2 logicalMouse = new((mouse.X - destination.X) * GameRenderer.Width / destination.Width,
-                    (mouse.Y - destination.Y) * GameRenderer.Height / destination.Height);
+                if (Raylib.IsKeyPressed(KeyboardKey.F11) || smoke && (frames == 30 || frames == 90))
+                {
+                    ToggleFullscreen(ref fullscreen, ref windowPosition, ref windowSize);
+                    fullscreenChanges++;
+                }
+                camera.Resize(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
+                largestWidth = Math.Max(largestWidth, camera.Width);
+                if (canvas.Id == 0 || canvas.Texture.Width != camera.Width || canvas.Texture.Height != camera.Height)
+                {
+                    if (canvas.Id != 0) Raylib.UnloadRenderTexture(canvas);
+                    canvas = Raylib.LoadRenderTexture(camera.Width, camera.Height);
+                    Raylib.SetTextureFilter(canvas.Texture, TextureFilter.Point);
+                }
+                Rectangle destination = new((Raylib.GetScreenWidth() - camera.Width * Camera.PixelScale) / 2f,
+                    (Raylib.GetScreenHeight() - camera.Height * Camera.PixelScale) / 2f,
+                    camera.Width * Camera.PixelScale, camera.Height * Camera.PixelScale);
+                Vector2 mouse = (Raylib.GetMousePosition() - new Vector2(destination.X, destination.Y)) / Camera.PixelScale;
                 bool click = Raylib.IsMouseButtonPressed(MouseButton.Left);
-                if (Raylib.IsKeyPressed(KeyboardKey.M) || click && Raylib.CheckCollisionPointRec(logicalMouse, GameRenderer.MuteButton))
-                    sounds.Muted = !sounds.Muted;
-                if (Raylib.IsKeyPressed(KeyboardKey.Enter) || game.IsGameOver && click && Raylib.CheckCollisionPointRec(logicalMouse, GameRenderer.RestartButton))
+                if (Raylib.IsKeyPressed(KeyboardKey.M) || click && Raylib.CheckCollisionPointRec(mouse, renderer.MuteButton))
+                    assets.Muted = !assets.Muted;
+                if (Raylib.IsKeyPressed(KeyboardKey.Enter) || game.IsGameOver && click && Raylib.CheckCollisionPointRec(mouse, renderer.RestartButton))
                 {
                     game.Dispose();
-                    game = new GameSession();
+                    game = new Game();
                     accumulator = 0;
                 }
-                InputState input = smoke ? new InputState(0, 0, frames < 15, false, false) : KeyboardInput.Read();
-                // Cap catch-up after a stalled frame. Never pass a variable dt to Box2D.
-                accumulator += smoke ? GameSession.FixedDelta : Math.Min(Raylib.GetFrameTime(), 0.25f);
-                while (accumulator >= GameSession.FixedDelta)
+                Controls input = smoke ? new Controls(0, 0, frames < 12, false, false) : ReadControls();
+                accumulator += smoke ? Game.FixedDelta : Math.Min(Raylib.GetFrameTime(), 0.25f);
+                while (accumulator >= Game.FixedDelta)
                 {
                     game.Step(input);
-                    accumulator -= GameSession.FixedDelta;
+                    accumulator -= Game.FixedDelta;
                 }
                 foreach (GameEvent signal in game.DrainEvents())
                 {
-                    smokeShot |= signal == GameEvent.Shot;
-                    sounds.Play(signal == GameEvent.Shot ? "laserSound" : "explosionSound");
+                    shot |= signal == GameEvent.Shot;
+                    assets.Play(signal);
                 }
+                if (game.Ship is { } ship) camera.Follow(ship.Position);
                 Raylib.BeginTextureMode(canvas);
-                renderer.Draw(game, input, sounds.Muted, sounds.Available);
+                renderer.Draw(game, input);
                 Raylib.EndTextureMode();
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.Black);
-                Raylib.DrawTexturePro(canvas.Texture,
-                    new Rectangle(0, 0, canvas.Texture.Width, -canvas.Texture.Height),
+                Raylib.DrawTexturePro(canvas.Texture, new Rectangle(0, 0, camera.Width, -camera.Height),
                     destination, Vector2.Zero, 0, Color.White);
                 Raylib.EndDrawing();
                 frames++;
@@ -73,8 +84,8 @@ public static class Program
             if (smoke)
             {
                 Raylib.TakeScreenshot("smoke.png");
-                Console.WriteLine($"SMOKE frames={frames} shot={smokeShot} audio={sounds.Available} entities={game.Entities.Count}");
-                return frames == 120 && smokeShot ? 0 : 2;
+                Console.WriteLine($"SMOKE frames={frames} shot={shot} audio={assets.AudioAvailable} fullscreenChanges={fullscreenChanges} logicalWidth={initialWidth}->{largestWidth}->{camera.Width}");
+                return frames == 180 && shot && fullscreenChanges == 2 && camera.Width == initialWidth ? 0 : 2;
             }
             return 0;
         }
@@ -91,14 +102,28 @@ public static class Program
         }
     }
 
-    private static Rectangle Letterbox()
+    private static Controls ReadControls() => new(
+        Axis(KeyboardKey.W, KeyboardKey.S), Axis(KeyboardKey.D, KeyboardKey.A),
+        Raylib.IsKeyDown(KeyboardKey.Space),
+        Raylib.IsKeyDown(KeyboardKey.LeftShift) || Raylib.IsKeyDown(KeyboardKey.RightShift),
+        Raylib.IsKeyDown(KeyboardKey.LeftControl) || Raylib.IsKeyDown(KeyboardKey.RightControl));
+
+    private static float Axis(KeyboardKey positive, KeyboardKey negative) =>
+        (Raylib.IsKeyDown(positive) ? 1 : 0) - (Raylib.IsKeyDown(negative) ? 1 : 0);
+
+    private static void ToggleFullscreen(ref bool fullscreen, ref Vector2 position, ref Vector2 size)
     {
-        float scale = MathF.Min((float)Raylib.GetScreenWidth() / GameRenderer.Width,
-            (float)Raylib.GetScreenHeight() / GameRenderer.Height);
-        // Integer upscale keeps pixels crisp; fractional scaling handles small windows.
-        if (scale >= 1) scale = MathF.Floor(scale);
-        float width = GameRenderer.Width * scale;
-        float height = GameRenderer.Height * scale;
-        return new Rectangle((Raylib.GetScreenWidth() - width) / 2, (Raylib.GetScreenHeight() - height) / 2, width, height);
+        if (!fullscreen)
+        {
+            position = Raylib.GetWindowPosition();
+            size = new Vector2(Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
+        }
+        Raylib.ToggleBorderlessWindowed();
+        fullscreen = !fullscreen;
+        if (!fullscreen)
+        {
+            Raylib.SetWindowSize((int)size.X, (int)size.Y);
+            Raylib.SetWindowPosition((int)position.X, (int)position.Y);
+        }
     }
 }
