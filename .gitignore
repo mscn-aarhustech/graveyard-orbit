@@ -1,0 +1,10 @@
+**/bin/
+**/obj/
+.vs/
+TestResults/
+artifacts/
+.DS_Store
+Thumbs.db
+*.user
+*.suo
+smoke.png

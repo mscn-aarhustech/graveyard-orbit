@@ -1,0 +1,7 @@
+{
+  "playerShip": "kenney/space-shooter-remastered/PNG/playerShip1_blue.png",
+  "asteroidLarge": "kenney/space-shooter-remastered/PNG/Meteors/meteorBrown_big1.png",
+  "laser": "kenney/space-shooter-remastered/PNG/Lasers/laserBlue01.png",
+  "laserSound": "kenney/sci-fi-sounds/Audio/laserSmall_000.ogg",
+  "explosionSound": "kenney/sci-fi-sounds/Audio/explosionCrunch_000.ogg"
+}
